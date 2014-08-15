@@ -40,11 +40,15 @@ pkgfix()
     fi
 
     if [[ -x "$(which yum)" ]]; then
-        echo "Only Apt based systems are currently supported"
+        sudo yum install GConf2.i686 GConf2-devel.i686 libvorbis.i686 \
+            SFML.i686 SFML-devel.i686 cryptopp.i686 libcurl.i686 libcurl-devel.i686 \
+            freetype.i686 freetype-devel.i686 libXrandr.i686 libXrandr-devel.i686 \
+            gtk2.i686 gtk2-devel.i686 pango.i686 pango-devel.i686 cairo.i686 \
+            cairo-devel.i686 gfk-pixbuf2-devel.i686 gtk-pixbuf2.i686
     fi
 
     if [[ -x "$(which pacman)" ]]; then
-        echo "Only Apt based systems are currently supported"
+        echo "Only Apt and Yum based systems are currently supported"
     fi
 
 }
@@ -75,7 +79,7 @@ while true; do
 
     if [[ -n $(check) ]]; then
         echo "You are still missing required libraries"
-        echo "make sure these are all valid directories"
+        echo "Make sure these are all valid directories"
         echo "$steamdir"
         echo "$steamlibs"
         echo "$dundeflibs"
