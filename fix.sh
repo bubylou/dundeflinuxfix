@@ -7,7 +7,7 @@ dundeflibs="$steamdir/SteamApps/common/DunDefEternity/DunDefEternity/Binaries/Li
 check()
 {
     ldd "$dundeflibs/DunDefGame" | grep "not found" | \
-        tr -d "\t" | cut -d"=" -f1
+        tr -d "\t" | cut -d"=" -f1 | sort -u
 }
 
 symfix()
@@ -16,7 +16,7 @@ symfix()
         for i in $(check); do
             steamlib=$(find "$steamlibs" -name "$i")
             if [[ -n $steamlib ]]; then
-                ln -sf $steamlib $dundeflibs/$i
+                ln -s $steamlib $dundeflibs/$i
                 echo "$i was linked"
             else
                 echo "$i was not found"
@@ -50,40 +50,45 @@ pkgfix()
     if [[ -x "$(which pacman)" ]]; then
         echo "Only Apt and Yum based systems are currently supported"
     fi
-
 }
 
 while true; do
-    printf "\n"
     echo "Choose one of the following potential fixes"
     echo "1 - Symbolic Link Fix"
     echo "2 - Package Install Fix"
     echo "Q or q to quit"
     read answer
 
+    echo ""
+
     case $answer in
         1)
             symfix
+            break
             ;;
         2)
             pkgfix
+            break
             ;;
         Q|q)
             exit
             ;;
         *)
+            echo ""
             echo "\"$answer\" is not an option "
     esac
 
-    printf "\n"
-
-    if [[ -n $(check) ]]; then
-        echo "You are still missing required libraries"
-        echo "Make sure these are all valid directories"
-        echo "$steamdir"
-        echo "$steamlibs"
-        echo "$dundeflibs"
-    else
-        echo "You now have all the required libraries"
-    fi
+    echo ""
 done
+
+echo ""
+
+if [[ -n $(check) ]]; then
+    echo "You are still missing required libraries"
+    echo "Make sure these are all valid directories"
+    echo "$steamdir"
+    echo "$steamlibs"
+    echo "$dundeflibs"
+else
+    echo "You have all the required libraries"
+fi
