@@ -11,7 +11,8 @@ yum="GConf2.i686 GConf2-devel.i686 libvorbis.i686 SFML.i686 SFML-devel.i686 cryp
     libcurl-devel.i686 freetype.i686 freetype-devel.i686 libXrandr.i686 libXrandr-devel.i686 gtk2.i686 \
     gtk2-devel.i686 pango.i686 pango-devel.i686 cairo.i686 cairo-devel.i686 gfk-pixbuf2-devel.i686 \
     gtk-pixbuf2.i686"
-pacman=""
+pacman="gconf lib32-libvorbis sfml crypto++ lib32-libgcrypt curl lib32-nss lib32-openssl lib32-libfreetype \
+    lib32-libxrandr lib32-gtk2 lib32-pango libtiger lib32-gdk-pixbuf2"
 
 check()
 {
@@ -58,7 +59,13 @@ pkgfix()
     fi
 
     if [[ -x "$(which pacman)" ]]; then
-        echo "Only Apt and Yum based systems are currently supported"
+        line=$(grep -n -A 2 "#\[multilib\]" pacman.conf | grep -o '[0-9]\{2,3\}')
+        if [[ -n "$line" ]]; then
+            for num in $line; do
+                sed -i ''$num's/#//' pacman.conf
+            done
+        fi
+        sudo pacman -Syy && sudo pacman -S $pacman
     fi
 }
 
