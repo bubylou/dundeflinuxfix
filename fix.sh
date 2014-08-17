@@ -2,7 +2,7 @@
 
 steamdir=$(locate "steam.pipe" | head -1 | sed "s/\/steam\.pipe/\//")
 steamlibs=$(locate steam-runtime/i386 | head -1)
-dundeflibs="$(find $steamdir -name SteamApps)/common/DunDefEternity/DunDefEternity/Binaries/Linux"
+dundeflibs=$(locate DunDefEternity | grep "DunDefEternity/DunDefEternity/Binaries/Linux" | head -1)
 
 apt="libgconf-2-4:i386 libvorbisfile3:i386 libsfml-dev:i386 libcrypto++-dev:i386 libcurl4-nss-dev:i386 \
     libcurl4-openssl-dev:i386 libfreetype6:i386 libxrandr2:i386 libgtk2.0-0:i386 libpango-1.0-0:i386 \
