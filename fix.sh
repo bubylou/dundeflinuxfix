@@ -70,6 +70,9 @@ pkgfix()
 }
 
 while true; do
+    echo "Updating Database"
+    sudo updatedb
+
     echo "Choose one of the following potential fixes"
     echo "1 - Symbolic Link Fix"
     echo "2 - Package Install Fix"

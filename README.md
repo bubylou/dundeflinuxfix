@@ -24,8 +24,3 @@ Now you can run it:
 ./fix.sh
 
 ```
-
-You can run the following if you need to undo the Symbolic Link fix.
-```
-./undo.sh
-```
