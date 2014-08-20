@@ -46,12 +46,16 @@ pkgfix()
 {
     echo "Installing the required packages"
 
-    if [[ -x "$(which aptitude)" ]]; then
-        sudo dpkg --add-architecture i386
-        sudo aptitude install $apt
-    elif [[ -x "$(which apt-get)" ]]; then
-        sudo dpkg --add-architecture i386
-        sudo apt-get install $apt
+    if [[ -x "$(which dpkg)" ]]; then
+        if [ $(uname -m) = "x86_64" ]; then
+            sudo dpkg --add-architecture i386
+        fi
+
+        if [[ -x "$(which aptitude)" ]]; then
+            sudo aptitude install $apt
+        elif [[ -x "$(which apt-get)" ]]; then
+            sudo apt-get install $apt
+        fi
     fi
 
     if [[ -x "$(which yum)" ]]; then
@@ -59,11 +63,13 @@ pkgfix()
     fi
 
     if [[ -x "$(which pacman)" ]]; then
-        line=$(grep -n -A 2 "#\[multilib\]" pacman.conf | grep -o '[0-9]\{2,3\}')
-        if [[ -n "$line" ]]; then
-            for num in $line; do
-                sed -i ''$num's/#//' pacman.conf
-            done
+        if [ $(uname -m) = "x86_64" ]; then
+            line=$(grep -n -A 2 "#\[multilib\]" pacman.conf | grep -o '[0-9]\{2,3\}')
+            if [[ -n "$line" ]]; then
+                for num in $line; do
+                    sed -i ''$num's/#//' pacman.conf
+                done
+            fi
         fi
         sudo pacman -Syy && sudo pacman -S $pacman
     fi
