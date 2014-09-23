@@ -1,8 +1,8 @@
 #!/bin/bash
 
-steamdir=$(locate "steam.pipe" | head -1 | sed "s/\/steam\.pipe/\//")
-steamlibs=$(locate steam-runtime/i386 | head -1)
-dundeflibs=$(locate DunDefEternity | grep "DunDefEternity/DunDefEternity/Binaries/Linux" | head -1)
+steamdir=$(find / -name "steam.pipe" 2>&1 | head -1 | sed "s/\/steam\.pipe/\//")
+steamlibs=$(find / -name "steam-runtime" 2>&1 | head -1)/i386
+dundeflibs=$(find / -name "DunDefEternity" 2>&1 | head -1)/DunDefEternity/Binaries/Linux
 
 check()
 {
@@ -33,9 +33,6 @@ symfix()
 }
 
 while true; do
-    echo "Updating Database"
-    sudo updatedb
-
     echo "Choose one of the following potential fixes"
     echo "1 - Symbolic Link Fix"
     echo "2 - Remove Symbolic Links"
